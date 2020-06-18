@@ -1,0 +1,35 @@
+/* Show it is fixed to the top */
+body {
+  min-height: 75rem;
+  padding-top: 4.5rem;
+}
+.bag {
+  color: white;
+}
+.btn-outline-success_es:hover {
+  color: #fff;
+  background-color: #53a1f3;
+  border-color: #2dd4e8;
+}
+
+.btn-outline-success_es:focus, .btn-outline-success.focus {
+  box-shadow: 0 0 0 0.2rem rgba(36, 171, 194, 0.5);
+}
+
+.btn-primary_es {
+  color: #fff;
+  background-color: #ee1818;
+  border-color: #b62e2e;
+}
+
+.btn-primary_es:hover {
+  color: #fff;
+  background-color: #d20909;
+  border-color: #760606;
+}
+.btn-primary_es:focus, .btn-primary.focus {
+  color: #fff;
+  background-color: #e80909;
+  border-color: #ac0202;
+  box-shadow: 0 0 0 0.2rem rgba(154, 2, 2, 0.93);
+}
