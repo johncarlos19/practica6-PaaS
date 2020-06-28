@@ -1,3 +1,6 @@
+import controladorServer.DataBaseControlador;
+import controladorServer.DataBaseServices;
+import controladorServer.ProductoServicios;
 import controladorServer.RecibirDatosControlador;
 import io.javalin.Javalin;
 import io.javalin.core.util.RouteOverviewPlugin;
@@ -7,16 +10,26 @@ import logico.Mercado;
 import logico.Usuario;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
 
-        Mercado.getInstance().agregar_Producto("Pan", BigDecimal.valueOf(500));
-        Mercado.getInstance().agregar_Producto("Ajo", BigDecimal.valueOf(20));
-        Mercado.getInstance().agregar_Producto("Queso", BigDecimal.valueOf(1000));
-        Mercado.getInstance().agregar_Producto("Molondron", BigDecimal.valueOf(2000));
-        Mercado.getInstance().getUsuario().add(new Usuario("admin","admin","admin"));
-        System.out.println(Mercado.getInstance().getUsuario().get(0).getNombre());
+        DataBaseControlador.startDb();
+
+        //Prueba de Conexión.
+        DataBaseServices.getInstancia().testConexion();
+
+        DataBaseControlador.crearTablas();
+        Mercado.getInstance().loadDataBase();
+        System.out.println(new ProductoServicios().getIdentityMax());
+
+        //Mercado.getInstance().agregar_Producto("Pan", BigDecimal.valueOf(500));
+        //Mercado.getInstance().agregar_Producto("Ajo", BigDecimal.valueOf(20));
+        //Mercado.getInstance().agregar_Producto("Queso", BigDecimal.valueOf(1000));
+        //Mercado.getInstance().agregar_Producto("Molondron", BigDecimal.valueOf(2000));
+       // Mercado.getInstance().getUsuario().add(new Usuario("admin","admin","admin"));
+        //System.out.println(Mercado.getInstance().getUsuario().get(0).getNombre());
         String mensaje = "Hola Mundo en Javalin :-D";
         System.out.println(mensaje);
 
@@ -29,6 +42,9 @@ public class Main {
             config.registerPlugin(new RouteOverviewPlugin("/rutas")); //aplicando plugins de las rutas
         }).start(getHerokuAssignedPort());
         registrandoPlantillas();
+
+
+
         //creando el manejador
         //app.get("/", ctx -> ctx.render("publico/index.html"));
 

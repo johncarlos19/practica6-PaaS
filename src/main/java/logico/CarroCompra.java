@@ -1,5 +1,7 @@
 package logico;
 
+import controladorServer.CarroCompraServicios;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
@@ -21,15 +23,18 @@ public class CarroCompra {
         for (int i = 0; i<listaProductos.size();i++){
             if (listaProductos.get(i).getId() == id_produ){
                 listaProductos.get(i).agregar_cantidad(cantidad);
+                new CarroCompraServicios().updateCarroCompraProducto(listaProductos.get(i),id);
                 enco = true;
                 break;
             }
         }
         if(enco == false){
-            listaProductos.add(new Producto(Mercado.getInstance().return_Producto(id_produ).getId(), Mercado.getInstance().return_Producto(id_produ).getNombre(), Mercado.getInstance().return_Producto(id_produ).getPrecio()));
+            Producto produ = new Producto(Mercado.getInstance().return_Producto(id_produ).getId(), Mercado.getInstance().return_Producto(id_produ).getNombre(), Mercado.getInstance().return_Producto(id_produ).getPrecio());
+            listaProductos.add(produ);
             for (int i = 0; i<listaProductos.size();i++){
                 if (listaProductos.get(i).getId() == id_produ){
                     listaProductos.get(i).agregar_cantidad(cantidad);
+                    new CarroCompraServicios().addProductoCarroCompra(listaProductos.get(i),id);
                     enco = true;
                     break;
                 }

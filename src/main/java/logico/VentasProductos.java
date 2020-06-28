@@ -2,7 +2,7 @@ package logico;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date ;
 import java.util.List;
 
 public class VentasProductos {

@@ -1,6 +1,12 @@
 package logico;
 
+import controladorServer.CarroCompraServicios;
+import controladorServer.ProductoServicios;
+import controladorServer.UsuarioServicios;
+import controladorServer.VentasProductosServicios;
+
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -24,6 +30,18 @@ public class Mercado {
             mercado=new Mercado();
         return mercado;
     }
+    public void loadDataBase(){
+        setUsuario((ArrayList<Usuario>) new UsuarioServicios().listaUsuario().clone());
+        setProductos((ArrayList<Producto>) new ProductoServicios().listaProducto().clone());
+        setCarroCompras((ArrayList<CarroCompra>) new CarroCompraServicios().listaCarroCompra().clone());
+        setVentasProductos((ArrayList<VentasProductos>) new VentasProductosServicios().listaVentasProductos());
+        Usuario aux = new UsuarioServicios().getUsuario("admin");
+        if (verificar_user(aux.getNombre(), aux.getPassword()) == false){
+            new UsuarioServicios().crearUsuario(new Usuario("admin", "Admin", "admin"));
+            usuario.add(new Usuario("admin", "Admin", "admin"));
+        }
+
+    }
 
     public static ArrayList<Usuario> getUsuario() {
         return usuario;
@@ -39,9 +57,12 @@ public class Mercado {
     }
 
     public void agregar_Producto(String nombre, BigDecimal precio){
-        int id = productos.size();
+        int id = new ProductoServicios().getIdentityMax();
         id+=1;
-        productos.add(new Producto(id,nombre,precio));
+        Producto produ = new Producto(id,nombre,precio);
+        new ProductoServicios().crearProducto(produ);
+        productos.add(produ);
+
     }
     public int cant_product(Long id){
         int cant = -1;
@@ -59,13 +80,14 @@ public class Mercado {
     }
 
     public void procesar_compra(Long id_cliente, String nombre){
-        int id = ventasProductos.size();
-        id+=1;
+        //int id = ventasProductos.size();
+        //id+=1;
         Calendar fecha = new GregorianCalendar();
         java.util.Date utilDate = fecha.getTime();
-        VentasProductos ven = new VentasProductos(Long.parseLong(Integer.toString(id)),utilDate,nombre);
+        VentasProductos ven = new VentasProductos(1, null ,nombre);
         ven.setListaProducto((ArrayList<Producto>) carroCompras.get(devuelve_cliente(id_cliente)).getListaProductos().clone());
-        ventasProductos.add(ven);
+        VentasProductos aux = new VentasProductosServicios().crearVentasProductos(ven);
+        ventasProductos.add(aux);
     }
 
     public void agregar_producto_a_cliente(long id_cliente, int id_producto, int cant){
@@ -87,7 +109,9 @@ public class Mercado {
         int id = devuelve_cliente(id_cliente);
         for (int i=0; i<carroCompras.get(id).getListaProductos().size();i++){
             if (carroCompras.get(id).getListaProductos().get(i).getId()==id_producto){ ;
+                new CarroCompraServicios().borrarProductoCarroCompra(id_cliente, carroCompras.get(id).getListaProductos().get(i).getId());
                 carroCompras.get(id).getListaProductos().remove(i);
+
                 return true;
             }
         }
@@ -96,6 +120,7 @@ public class Mercado {
     public boolean borrar_todo_carro(long id_cliente){
         int id = devuelve_cliente(id_cliente);
         for (int i=0; i<carroCompras.get(id).getListaProductos().size();i++){
+            new CarroCompraServicios().borrarTodoProductoCarroCompra(id_cliente);
             carroCompras.get(id).getListaProductos().clear();
             return true;
 
@@ -106,7 +131,8 @@ public class Mercado {
     public int borrar_producto(int id){
         int cant = -1;
         for (int i=0;i<productos.size();i++){
-            if (productos.get(i).getId()==id){ ;
+            if (productos.get(i).getId()==id){
+                new ProductoServicios().borrarProducto(id);
                 productos.remove(i);
                 cant = i;
                 return cant;
@@ -127,6 +153,7 @@ public class Mercado {
             if (productos.get(i).getId()==id){
                 productos.get(i).setNombre(nombre);
                 productos.get(i).setPrecio(BigDecimal.valueOf(Double.parseDouble(precio)).setScale(2));
+                new ProductoServicios().updateProducto(productos.get(i));
             }
         }
     }

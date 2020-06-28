@@ -6,7 +6,10 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v4.0.1">
-    <title>Fixed top navbar example · Bootstrap</title>
+    <title>Carrito de Compra en Sesion</title>
+    <link rel = "icon" href =
+            "img/shopping-bag-2-512.gif"
+          type = "image/x-icon">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/navbar-fixed/">
 
@@ -34,7 +37,7 @@
     <link href="css/navbar-top-fixed.css" rel="stylesheet">
   </head>
   <body>
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark text-nowrap">
   <a class="navbar-brand" href="#"><img src="img/shopping-bag-2-512.gif" height="32" width="32"> Mercado Rapido</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -60,18 +63,31 @@
         </form>
       </li>
     </ul>
-    <form class="form-inline mt-2 mt-md-0" method="get" action="\carrito" id="carr">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit" form="carr">
-        Carrito<svg class="bi bi-cart" width="20" height="20" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-          <path fill-rule="evenodd" d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
-        </svg><a>(</a><a th:text="${cant}"></a><a>)</a>
-       </button>
+    <ul class="navbar-nav  mt-2 mt-md-0 ">
+      <li class="nav-item active ">
+        <form action="/login" method="get" class="nav-item active">
+          <input type="hidden" th:value="${log}" name="ident">
+          <button class="nav-link btn btn-outline-success_es" type="submit" th:text="${user}">Iniciar seccion<span class="sr-only">(current)</span></button>
+        </form>
+      </li>
 
-    </form>
+      <li class="nav-item active ">
+        <form class="form-inline mt-2 mt-md-0" method="get" action="\carrito" id="carr">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit" form="carr">
+            Carrito<svg class="bi bi-cart" width="20" height="20" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+          </svg><a>(</a><a th:text="${cant}"></a><a>)</a>
+          </button>
+
+        </form>
+      </li>
+    </ul>
+
+
   </div>
 </nav>
 
-<main role="main" class="container" >
+<main role="main" class="container text-nowrap" >
   <div class="jumbotron" th:style="${compra}">
     <h1 class="text-center">Lista De Productos</h1>
     <table class="table">

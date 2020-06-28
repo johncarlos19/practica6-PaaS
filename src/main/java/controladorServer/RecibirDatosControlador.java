@@ -5,7 +5,10 @@ import logico.CarroCompra;
 import logico.Mercado;
 import logico.Producto;
 import logico.VentasProductos;
+import org.jasypt.util.password.StrongPasswordEncryptor;
+import org.jasypt.util.text.*;
 
+import javax.naming.Context;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,8 +20,13 @@ import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class RecibirDatosControlador extends JavalinControlador{
 
+    AES256TextEncryptor userEncryptor = new AES256TextEncryptor();
+    AES256TextEncryptor passwordEncryptor = new AES256TextEncryptor();
+
     public RecibirDatosControlador(Javalin app) {
         super(app);
+        userEncryptor.setPassword("admin");
+        passwordEncryptor.setPassword("admin");
 
     }
 
@@ -30,6 +38,35 @@ public class RecibirDatosControlador extends JavalinControlador{
 
     @Override
     public void aplicarRutas() {
+        /*
+        before(ctx -> {
+            //recuperando el usuario de la sesión,en caso de no estar, redirecciona la pagina 401.
+            //ctx.cookie("carroCompra","1");
+
+            long cant;
+            int aux = 0;
+            String value = ctx.cookie("carroCompra");
+            if (value!=null){
+                cant = Long.parseLong(value);
+                if (Mercado.getInstance().cant_product(cant)!=-1){
+                    aux = Mercado.getInstance().cant_product(cant);
+                }else{
+                    CarroCompra carr = new CarroCompra(cant);
+                    new CarroCompraServicios().crearCarroCompra(carr);
+                    Mercado.getInstance().getCarroCompras().add(carr);
+                    aux = Mercado.getInstance().cant_product(cant);
+                }
+
+            }else{
+                long id = new CarroCompraServicios().getIdentityMax()+1;
+                ctx.cookie("carroCompra", Long.toString(id));
+                CarroCompra carr = new CarroCompra(id);
+                new CarroCompraServicios().crearCarroCompra(carr);
+                Mercado.getInstance().getCarroCompras().add(carr);
+                value = Long.toString(id);
+            }
+            //continuando con la consulta del endpoint solicitado.
+        });*/
 
 
         app.get("/login", ctx -> {
@@ -37,23 +74,39 @@ public class RecibirDatosControlador extends JavalinControlador{
             //
             String ident = ctx.queryParam("ident");
             System.out.println(ident);
+            String user = ctx.cookie("Login");
+            String pass = ctx.cookie("LoginS");
 
 
-            if (ctx.cookie("Login")!=null){
-                switch (ident){
-                    case "venta":
-                        ctx.cookie("Login",ctx.req.getSession().getId(),120);
-                        ctx.redirect("/venta_producto");
-                        break;
-                    case "administrar":
-                        ctx.cookie("Login",ctx.req.getSession().getId(),120);
-                        ctx.redirect("/administrar");
-                        break;
-                    default:
-                        ctx.redirect("/");
-                        break;
+            if (user!=null && pass!=null){
+                String userDescr = userEncryptor.decrypt(user);
+                String passDescr = passwordEncryptor.decrypt(pass);
+                if (Mercado.getInstance().verificar_user(userDescr,passDescr) == true) {
+                    switch (ident) {
+                        case "venta":
+                            //ctx.cookie("Login", ctx.req.getSession().getId(), 120);
+                            ctx.redirect("/venta_producto");
+                            break;
+                        case "administrar":
+                            //ctx.cookie("Login", ctx.req.getSession().getId(), 120);
+                            ctx.redirect("/administrar");
+                            break;
+                        case "logout":
+                            //ctx.cookie("Login", ctx.req.getSession().getId(), 120);
+                            ctx.removeCookie("Login");
+                            ctx.removeCookie("LoginS");
+                            ctx.redirect("/");
+                            break;
+                        default:
+                            ctx.redirect("/");
+                            break;
+                    }
+                }else{
+                    Map<String, Object> modelo = new HashMap<>();
+                    modelo.put("valor",ident);
+
+                    ctx.render("/publico/login/login.html",modelo);
                 }
-
             }else{
                 Map<String, Object> modelo = new HashMap<>();
                 modelo.put("valor",ident);
@@ -75,7 +128,7 @@ public class RecibirDatosControlador extends JavalinControlador{
             System.out.println(salida);
             String id;
             String nombre;
-            String id_cliente = ctx.cookie("carroCompra");
+            String id_cliente = ctx.sessionAttribute("carroCompra");
             String id_accion = ctx.queryParam("id_accion");
             String procee = " ";
             switch (id_accion){
@@ -111,6 +164,16 @@ public class RecibirDatosControlador extends JavalinControlador{
             String administrar = "display: none";
             String compra = "display: none";
             Map<String, Object> modelo = new HashMap<>();
+            String userenc = userEncryptor.decrypt(ctx.cookie("Login"));
+            if(userenc != null){
+                modelo.put("user",userenc+" - Salir");
+                modelo.put("log","logout");
+            }else{
+                userenc= "Iniciar Seccion";
+                modelo.put("user",userenc);
+                modelo.put("log","login");
+            }
+            modelo.put("cant",aux);
             modelo.put("cant", aux);
             modelo.put("listaProducto", listaProducto);
             modelo.put("administrar", administrar);
@@ -128,7 +191,7 @@ public class RecibirDatosControlador extends JavalinControlador{
 
 
         app.get("/carrito", ctx -> {
-            String id_cliente = ctx.cookie("carroCompra");
+            String id_cliente = ctx.sessionAttribute("carroCompra");
             if (id_cliente!=null) {
                 List<String> salida = new ArrayList<>();
                 salida.add("Mostrando todos los parametros enviados:");
@@ -146,6 +209,16 @@ public class RecibirDatosControlador extends JavalinControlador{
                 String administrar = "display: none";
                 String compra = "display: none";
                 Map<String, Object> modelo = new HashMap<>();
+                String userenc = userEncryptor.decrypt(ctx.cookie("Login"));
+                if(userenc != null){
+                    modelo.put("user",userenc+" - Salir");
+                    modelo.put("log","logout");
+                }else{
+                    userenc= "Iniciar Seccion";
+                    modelo.put("user",userenc);
+                    modelo.put("log","login");
+                }
+                modelo.put("cant",aux);
                 modelo.put("cant", aux);
                 modelo.put("listaProducto", listaProducto);
                 modelo.put("administrar", administrar);
@@ -172,9 +245,9 @@ public class RecibirDatosControlador extends JavalinControlador{
         app.get("/new_product", ctx -> {
             String nombre_producto = ctx.queryParam("producto");
             String precio_producto = ctx.queryParam("precio");
-            Mercado.getInstance().agregar_Producto(nombre_producto, BigDecimal.valueOf(Long.parseLong(precio_producto)));
+            Mercado.getInstance().agregar_Producto(nombre_producto, BigDecimal.valueOf(Double.parseDouble(precio_producto)));
             //
-            String id_cliente = ctx.cookie("carroCompra");
+            String id_cliente = ctx.sessionAttribute("carroCompra");
             List<Producto> listaProducto = Mercado.getInstance().getProductos();
             List<VentasProductos> listaVenta = Mercado.getInstance().getVentasProductos();
             CarroCompra carroProducto = Mercado.getInstance().getCarroCompras().get(Mercado.getInstance().devuelve_cliente(Long.parseLong(id_cliente)));
@@ -182,6 +255,16 @@ public class RecibirDatosControlador extends JavalinControlador{
             String administrar = "display: block";
             String compra = "display: none";
             Map<String, Object> modelo = new HashMap<>();
+            String userenc = userEncryptor.decrypt(ctx.cookie("Login"));
+            if(userenc != null){
+                modelo.put("user",userenc+" - Salir");
+                modelo.put("log","logout");
+            }else{
+                userenc= "Iniciar Seccion";
+                modelo.put("user",userenc);
+                modelo.put("log","login");
+            }
+            modelo.put("cant",aux);
             modelo.put("cant",aux);
             modelo.put("listaProducto", listaProducto);
             modelo.put("administrar",administrar);
@@ -220,7 +303,7 @@ public class RecibirDatosControlador extends JavalinControlador{
                     ctx.redirect("/");
                     break;
             }
-            String id_cliente = ctx.cookie("carroCompra");
+            String id_cliente = ctx.sessionAttribute("carroCompra");
             List<Producto> listaProducto = Mercado.getInstance().getProductos();
             List<VentasProductos> listaVenta = Mercado.getInstance().getVentasProductos();
             CarroCompra carroProducto = Mercado.getInstance().getCarroCompras().get(Mercado.getInstance().devuelve_cliente(Long.parseLong(id_cliente)));
@@ -228,6 +311,16 @@ public class RecibirDatosControlador extends JavalinControlador{
             String administrar = "display: block";
             String compra = "display: none";
             Map<String, Object> modelo = new HashMap<>();
+            String userenc = userEncryptor.decrypt(ctx.cookie("Login"));
+            if(userenc != null){
+                modelo.put("user",userenc+" - Salir");
+                modelo.put("log","logout");
+            }else{
+                userenc= "Iniciar Seccion";
+                modelo.put("user",userenc);
+                modelo.put("log","login");
+            }
+            modelo.put("cant",aux);
             modelo.put("cant",aux);
             modelo.put("listaProducto", listaProducto);
             modelo.put("administrar",administrar);
@@ -245,16 +338,6 @@ public class RecibirDatosControlador extends JavalinControlador{
 
 
 
-        app.get("/parametros", ctx -> {
-            List<String> salida = new ArrayList<>();
-            salida.add("Mostrando todos los parametros enviados:");
-            //listando la informacion.
-            ctx.queryParamMap().forEach((key, lista) -> {
-                salida.add(String.format("[%s] = [%s]", key, String.join(",", lista)));
-            });
-            //
-            ctx.result(String.join("\n", salida));
-        });
 
         app.get("/add", ctx -> {
             List<String> salida = new ArrayList<>();
@@ -266,7 +349,7 @@ public class RecibirDatosControlador extends JavalinControlador{
             //
             String id = ctx.queryParam("id");
             String cant = ctx.queryParam("cantidad");
-            String id_cliente = ctx.cookie("carroCompra");
+            String id_cliente = ctx.sessionAttribute("carroCompra");
             System.out.println(id_cliente);
             Mercado.getInstance().agregar_producto_a_cliente(Long.parseLong(id_cliente),Integer.parseInt(id),Integer.parseInt(cant));
 
@@ -278,6 +361,17 @@ public class RecibirDatosControlador extends JavalinControlador{
             String administrar = "display: none";
             String compra = "display: block";
             Map<String, Object> modelo = new HashMap<>();
+
+            String userenc = userEncryptor.decrypt(ctx.cookie("Login"));
+            if(userenc != null){
+                modelo.put("user",userenc+" - Salir");
+                modelo.put("log","logout");
+            }else{
+                userenc= "Iniciar Seccion";
+                modelo.put("user",userenc);
+                modelo.put("log","login");
+            }
+            modelo.put("cant",aux);
             modelo.put("cant",aux);
             modelo.put("listaProducto", listaProducto);
             modelo.put("administrar",administrar);
@@ -292,39 +386,6 @@ public class RecibirDatosControlador extends JavalinControlador{
             System.out.println("id quien agrego: "+ctx.req.getSession().getId());
         });
 
-
-        /**
-         * Ejemplo de parametros como parte de la URL, notar los ':' en el path.
-         * http://localhost:7000/parametros/20011136/
-         */
-        app.get("/parametros/:matricula/", ctx -> {
-            ctx.result("El Estudiante tiene la matricula: "+ctx.pathParam("matricula"));
-        });
-
-        /**
-         * Ejemplo de parametros como parte de la URL, notar los ':' en el path.
-         * Puedo hacer combinaciones
-         * http://localhost:7000/parametros/20011136/nombre/carloscamacho
-         */
-        app.get("/parametros/:matricula/nombre/:nombre", ctx -> {
-            ctx.result("El Estudiante tiene la matricula: "+ctx.pathParam("matricula")+" - nombre: "+ctx.pathParam("nombre"));
-        });
-
-        /**
-         * Ejemplo de información en el cuerpo del mensaje
-         * http://localhost:7000/formulario.html para el formulario
-         */
-        app.post("/parametros", ctx -> {
-            List<String> salida = new ArrayList<>();
-            salida.add("Mostrando todos la informacion enviada en el cuerpo:");
-            //listando la informacion.
-            ctx.formParamMap().forEach((key, lista) -> {
-                salida.add(String.format("[%s] = [%s]", key, String.join(",", lista)));
-            });
-            //
-            ctx.result(String.join("\n", salida));
-            System.out.println(salida);
-        });
         app.post("/login", ctx -> {
             List<String> salida = new ArrayList<>();
             ctx.formParamMap().forEach((key, lista) -> {
@@ -336,16 +397,36 @@ public class RecibirDatosControlador extends JavalinControlador{
             String ident = ctx.formParam("ident");
             System.out.println("("+user+")"+"("+pass+")"+"("+ident+")");
             if (Mercado.getInstance().verificar_user(user,pass) == true){
+                //userEncryptor.setPassword("admin");
+                //passwordEncryptor.setPassword("admin");
+                String encryptedUser = userEncryptor.encrypt(user);
+                String passEncryp = passwordEncryptor.encrypt(pass);
+                if (ctx.formParam("statu")!=null){
+
+                    if (ctx.cookie("LoginS")==null) {
+                        ctx.cookie("LoginS", passEncryp, 604800);
+                        ctx.cookie("Login",encryptedUser,604800);
+                    }
+                }else {
+                    ctx.cookie("LoginS", passEncryp, 120);
+                    ctx.cookie("Login",encryptedUser,120);
+                }
                 System.out.println("entro");
                 switch (ident){
 
                     case "venta":
-                        ctx.cookie("Login",ctx.req.getSession().getId(),120);
+
+
+
                         ctx.redirect("/venta_producto");
                         break;
                     case "administrar":
-                        ctx.cookie("Login",ctx.req.getSession().getId(),120);
+
                         ctx.redirect("/administrar");
+                        break;
+                    case "login":
+
+                        ctx.redirect("/");
                         break;
                     default:
                         ctx.redirect("/");
@@ -353,21 +434,6 @@ public class RecibirDatosControlador extends JavalinControlador{
                 }
             }
 
-        });
-
-        /**
-         * En cualquier situación puedo los encabezados de la trama HTTP.
-         * http://localhost:7000/leerheaders
-         */
-        app.get("leerheaders", ctx -> {
-            List<String> salida = new ArrayList<>();
-            salida.add("Mostrando la informacion enviada en los headers:");
-            //listando la informacion.
-            ctx.headerMap().forEach((key, valor) -> {
-                salida.add(String.format("[%s] = [%s]", key, String.join(",", valor)));
-            });
-            //
-            ctx.result(String.join("\n", salida));
         });
 
         app.routes(() -> {
@@ -383,7 +449,7 @@ public class RecibirDatosControlador extends JavalinControlador{
                             salida.add(String.format("[%s] = [%s]", key, String.join(",", lista)));
                         });
                         //
-                        String id_cliente = ctx.cookie("carroCompra");
+                        String id_cliente = ctx.sessionAttribute("carroCompra");
                         List<Producto> listaProducto = Mercado.getInstance().getProductos();
                         List<VentasProductos> listaVenta = Mercado.getInstance().getVentasProductos();
                         CarroCompra carroProducto = Mercado.getInstance().getCarroCompras().get(Mercado.getInstance().devuelve_cliente(Long.parseLong(id_cliente)));
@@ -391,6 +457,16 @@ public class RecibirDatosControlador extends JavalinControlador{
                         String administrar = "display: none";
                         String compra = "display: none";
                         Map<String, Object> modelo = new HashMap<>();
+                        String userenc = userEncryptor.decrypt(ctx.cookie("Login"));
+                        if(userenc != null){
+                            modelo.put("user",userenc+" - Salir");
+                            modelo.put("log","logout");
+                        }else{
+                            userenc= "Iniciar Seccion";
+                            modelo.put("user",userenc);
+                            modelo.put("log","login");
+                        }
+                        modelo.put("cant",aux);
                         modelo.put("cant", aux);
                         modelo.put("listaProducto", listaProducto);
                         modelo.put("administrar", administrar);
@@ -421,7 +497,7 @@ public class RecibirDatosControlador extends JavalinControlador{
                                     salida.add(String.format("[%s] = [%s]", key, String.join(",", lista)));
                                 });
                                 //
-                                String id_cliente = ctx.cookie("carroCompra");
+                                String id_cliente = ctx.sessionAttribute("carroCompra");
                                 List<Producto> listaProducto = Mercado.getInstance().getProductos();
                                 List<VentasProductos> listaVenta = Mercado.getInstance().getVentasProductos();
                                 CarroCompra carroProducto = Mercado.getInstance().getCarroCompras().get(Mercado.getInstance().devuelve_cliente(Long.parseLong(id_cliente)));
@@ -429,6 +505,16 @@ public class RecibirDatosControlador extends JavalinControlador{
                                 String administrar = "display: block";
                                 String compra = "display: none";
                                 Map<String, Object> modelo = new HashMap<>();
+                                String userenc = userEncryptor.decrypt(ctx.cookie("Login"));
+                                if(userenc != null){
+                                    modelo.put("user",userenc+" - Salir");
+                                    modelo.put("log","logout");
+                                }else{
+                                    userenc= "Iniciar Seccion";
+                                    modelo.put("user",userenc);
+                                    modelo.put("log","login");
+                                }
+                                modelo.put("cant",aux);
                                 modelo.put("cant", aux);
                                 modelo.put("listaProducto", listaProducto);
                                 modelo.put("administrar", administrar);
@@ -457,12 +543,22 @@ public class RecibirDatosControlador extends JavalinControlador{
                     List<Producto> listaProducto = Mercado.getInstance().getProductos();
                     long cant;
                     int aux = 0;
-                    String value = ctx.cookie("carroCompra");
+                    String value = ctx.sessionAttribute("carroCompra");
                     CarroCompra carroProducto = Mercado.getInstance().getCarroCompras().get(Mercado.getInstance().devuelve_cliente(Long.parseLong(value)));
 
                     String administrar = "display: none";
                     String compra = "display: none";
                     Map<String, Object> modelo = new HashMap<>();
+                    String userenc = userEncryptor.decrypt(ctx.cookie("Login"));
+                    if(userenc != null){
+                        modelo.put("user",userenc+" - Salir");
+                        modelo.put("log","logout");
+                    }else{
+                        userenc= "Iniciar Seccion";
+                        modelo.put("user",userenc);
+                        modelo.put("log","login");
+                    }
+                    modelo.put("cant",aux);
                     modelo.put("cant",aux);
                     modelo.put("listaProducto", listaProducto);
                     modelo.put("administrar",administrar);
@@ -478,37 +574,64 @@ public class RecibirDatosControlador extends JavalinControlador{
             });
             path("/", () -> {
 
-                /**
-                 * http://localhost:7000/thymeleaf/
-                 */
+
                 get( ctx -> {
-                    List<Producto> listaProducto = Mercado.getInstance().getProductos();
-                    List<VentasProductos> listaVenta = Mercado.getInstance().getVentasProductos();
+
+                    //ctx.cookie("carroCompra","1");
+
                     long cant;
                     int aux = 0;
-                    String value = ctx.cookie("carroCompra");
-                    if (value!=null){
-                        cant = Long.parseLong(value);
+                    String value = ctx.sessionAttribute("carroCompra");
+                    String valueCookie = ctx.cookie("carroCompra");
+
+                    if (value!=null || valueCookie!=null){
+                        if (value!=null){
+                            cant = Long.parseLong(value);
+                        }else{
+                            cant = Long.parseLong(valueCookie);
+                            value = valueCookie;
+                            ctx.sessionAttribute("carroCompra", valueCookie);
+
+                        }
+
                         if (Mercado.getInstance().cant_product(cant)!=-1){
                             aux = Mercado.getInstance().cant_product(cant);
                         }else{
-                            Mercado.getInstance().getCarroCompras().add(new CarroCompra(cant));
+                            CarroCompra carr = new CarroCompra(cant);
+                            new CarroCompraServicios().crearCarroCompra(carr);
+                            Mercado.getInstance().getCarroCompras().add(carr);
                             aux = Mercado.getInstance().cant_product(cant);
                         }
 
                     }else{
-                        long id = Mercado.getInstance().getCarroCompras().size()+1;
-                        ctx.cookie("carroCompra",Long.toString(id));
-
-                        Mercado.getInstance().getCarroCompras().add(new CarroCompra(id));
+                        long id = new CarroCompraServicios().getIdentityMax()+1;
+                        ctx.sessionAttribute("carroCompra", Long.toString(id));
+                        ctx.cookie("carroCompra", Long.toString(id),66000000);
+                        CarroCompra carr = new CarroCompra(id);
+                        new CarroCompraServicios().crearCarroCompra(carr);
+                        Mercado.getInstance().getCarroCompras().add(carr);
                         value = Long.toString(id);
+                        valueCookie = Long.toString(id);
                     }
+                    List<Producto> listaProducto = Mercado.getInstance().getProductos();
+                    List<VentasProductos> listaVenta = Mercado.getInstance().getVentasProductos();
                     //value = ctx.cookie("carroCompra");
                     CarroCompra carroProducto = Mercado.getInstance().getCarroCompras().get(Mercado.getInstance().devuelve_cliente(Long.parseLong(value)));
                     String administrar = "display: none";
                     String compra = "display: block";
+
                     Map<String, Object> modelo = new HashMap<>();
+                    String userenc = userEncryptor.decrypt(ctx.cookie("Login"));
+                    if(userenc != null){
+                        modelo.put("user",userenc+" - Salir");
+                        modelo.put("log","logout");
+                    }else{
+                        userenc= "Iniciar Seccion";
+                        modelo.put("user",userenc);
+                        modelo.put("log","login");
+                    }
                     modelo.put("cant",aux);
+
                     modelo.put("listaProducto", listaProducto);
                     modelo.put("administrar",administrar);
                     modelo.put("compra",compra);

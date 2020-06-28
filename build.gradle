@@ -13,6 +13,8 @@ mainClassName = 'Main'
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile group: 'org.jasypt', name: 'jasypt', version: '1.9.3'
+    compile 'com.h2database:h2:1.4.200'
     compile 'io.javalin:javalin:3.8.0'
     //manejo de log.
     compile "org.slf4j:slf4j-simple:1.7.28"

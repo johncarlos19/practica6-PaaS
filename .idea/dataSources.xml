@@ -7,5 +7,11 @@
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://localhost:3306/goniometria</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="CarritoCompraSessiones" uuid="df5904b0-9fba-4be4-87aa-5eae23d61db4">
+      <driver-ref>h2.unified</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.h2.Driver</jdbc-driver>
+      <jdbc-url>jdbc:h2:~/CarritoCompraSessiones</jdbc-url>
+    </data-source>
   </component>
 </project>
