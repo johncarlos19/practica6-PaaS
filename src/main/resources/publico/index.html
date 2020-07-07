@@ -131,14 +131,14 @@
             <tr th:each="product : ${listaProducto}">
 
                 <form th:id="${product.id}+'administrar'" method="get" action="\doItChange">
-                    <th><input th:value="${product.nombre}" scope="row" type="text" name="nombre"></th>
-                    <td><input th:value="${product.precio}" name="precio" step="0.01"></td>
+                    <th><input th:value="${product.nombre}" scope="row" type="text" name="nombre" readonly></th>
+                    <td><input th:value="${product.precio}" name="precio" step="0.01" readonly></td>
                     <td>
                         <input name="id" type="hidden" th:value="${product.id}">
                         <input name="id_accion" class="btn btn-lg btn-primary" th:id="${product.id}+'edit'"
-                               th:form="${product.id}+'administrar'" type="submit" value="Editar">
+                               th:form="${product.id}+'administrar'" type="submit" value="Editar" >
                         <input name="id_accion" class="btn btn-lg btn-primary_es" th:id="${product.id}+'dele'"
-                               th:form="${product.id}+'administrar'" type="submit" value="Eliminar"></input></td>
+                               th:form="${product.id}+'administrar'" type="submit" value="Eliminar" ></input></td>
                 </form>
             </tr>
             </tbody>

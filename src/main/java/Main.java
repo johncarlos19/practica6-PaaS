@@ -19,7 +19,7 @@ public class Main {
         DataBaseServices.getInstancia().testConexion();
         CarroCompraServicios carroCompraServicios = new CarroCompraServicios();
         //DataBaseControlador.crearTablas();
-        Mercado.getInstance().loadDataBase();
+
         //System.out.println(new ProductoServicios().getIdentityMax());
 
         //Mercado.getInstance().agregar_Producto("Pan", BigDecimal.valueOf(500));
@@ -30,6 +30,7 @@ public class Main {
         //System.out.println(Mercado.getInstance().getUsuario().get(0).getNombre());
         String mensaje = "Hola Mundo en Javalin :-D";
         System.out.println(mensaje);
+        Mercado.getInstance().loadDataBase();
 
         //Creando la instancia del servidor.
         Javalin app = Javalin.create(config ->{

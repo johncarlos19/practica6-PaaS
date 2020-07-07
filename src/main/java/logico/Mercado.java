@@ -24,14 +24,15 @@ public class Mercado {
 
     public void loadDataBase() {
 
-        Usuario aux = new UsuarioServicios().getUsuario("admin");
+
         try {
-            if (verificar_user(aux.getNombre(), aux.getPassword()) == false) {
+            if (verificar_user("admin", "admin") == false) {
                 new UsuarioServicios().crearUsuario(new Usuario("admin", "Admin", "admin"));
             }
         } catch (NullPointerException e) {
             new UsuarioServicios().crearUsuario(new Usuario("admin", "Admin", "admin"));
-            Producto pp = new Producto("Pan", BigDecimal.valueOf(50.00).setScale(2));
+
+           /* Producto pp = new Producto("Pan", BigDecimal.valueOf(50.00).setScale(2));
             pp.setDescripcion("Bueno");
             new ProductoServicios().crearProducto(pp);
             Producto dd = new Producto("Pizza", BigDecimal.valueOf(500.00).setScale(2));
@@ -63,7 +64,7 @@ public class Mercado {
             new ProductoServicios().crearProducto(ddt);
             Producto ddtd = new Producto("CC", BigDecimal.valueOf(500.00).setScale(2));
             ddtd.setDescripcion("Malo");
-            new ProductoServicios().crearProducto(ddtd);
+            new ProductoServicios().crearProducto(ddtd);*/
         }
 
 
