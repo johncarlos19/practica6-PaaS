@@ -11,12 +11,12 @@ public class DataBaseServices {
     private String URL = "jdbc:h2:tcp://localhost/~/CarritoCompraSessiones"; //Modo Server...
 
 
-    private  DataBaseServices(){
-        registrarDriver();
+    private DataBaseServices() {
+
     }
 
-    public static DataBaseServices getInstancia(){
-        if(instancia==null){
+    public static DataBaseServices getInstancia() {
+        if (instancia == null) {
             instancia = new DataBaseServices();
         }
         return instancia;
@@ -25,21 +25,14 @@ public class DataBaseServices {
     /**
      * Metodo para el registro de driver de conexión.
      */
-    private void registrarDriver() {
-        try {
-            Class.forName("org.h2.Driver");
-        } catch (ClassNotFoundException ex) {
-            System.out.println("aqui"+ex);
-            //Logger.getLogger(EstudianteServices.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+
 
     public Connection getConexion() {
         Connection con = null;
         try {
             con = DriverManager.getConnection(URL, "sa", "");
         } catch (SQLException ex) {
-            System.out.println("aa"+ex);
+            System.out.println("aa" + ex);
             //Logger.getLogger(EstudianteServices.class.getName()).log(Level.SEVERE, null, ex);
         }
         return con;
@@ -50,7 +43,7 @@ public class DataBaseServices {
             getConexion().close();
             System.out.println("Conexión realizado con exito...");
         } catch (SQLException ex) {
-            System.out.println("bb"+ex);
+            System.out.println("bb" + ex);
             //Logger.getLogger(EstudianteServices.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

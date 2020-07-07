@@ -8,15 +8,16 @@ import java.sql.Statement;
 
 public class DataBaseControlador {
     /**
-     *
      * @throws SQLException
      */
     public static void startDb() throws SQLException {
-        Server.createTcpServer("-tcpPort", "9092", "-tcpAllowOthers").start();
+        Server.createTcpServer("-tcpPort", "9092", "-tcpAllowOthers", "-ifNotExists").start();
+        String status = Server.createWebServer("-trace", "-webPort", "0").start().getStatus();
+        //
+        System.out.println("Status Web: " + status);
     }
 
     /**
-     *
      * @throws SQLException
      */
     public static void stopDb() throws SQLException {
@@ -28,6 +29,7 @@ public class DataBaseControlador {
      * Metodo para recrear las tablas necesarios
      * @throws SQLException
      */
+    /*
     public static void crearTablas() throws  SQLException{
         String sql = "CREATE TABLE if not exists Usuario\n" +
                 "(\n" +
@@ -83,5 +85,5 @@ public class DataBaseControlador {
         statement.execute(sql);
         statement.close();
         con.close();
-    }
+    }*/
 }

@@ -1,10 +1,21 @@
 package logico;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
 public class Usuario {
+    @Id
     private String usuario;
+    @Column(name = "Nombre")
     private String nombre;
+    @Column(name = "Password")
     private String password;
 
+    public Usuario(){
+
+    }
     public Usuario(String usuario, String nombre, String password) {
         this.usuario = usuario;
         this.nombre = nombre;

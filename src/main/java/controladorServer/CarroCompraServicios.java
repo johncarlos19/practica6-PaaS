@@ -1,20 +1,27 @@
 package controladorServer;
 
 import logico.CarroCompra;
+import logico.CarroCompra_Producto;
 import logico.Producto;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class CarroCompraServicios {
+public class CarroCompraServicios extends GestionadDB<CarroCompra> {
 
-    public ArrayList<CarroCompra> listaCarroCompra(){
-        ArrayList<CarroCompra> list = new ArrayList<>();
+    public CarroCompraServicios() {
+        super(CarroCompra.class);
+    }
+
+    public Set<CarroCompra> listaCarroCompra() {
+        /*
+        Set<CarroCompra> list = new HashSet<>();
         Connection con = null; //objeto conexion.
         try {
             //
@@ -36,12 +43,14 @@ public class CarroCompraServicios {
             } catch (SQLException ex) {
                 Logger.getLogger(CarroCompraServicios.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        return list;
+        }*/
+        return (Set<CarroCompra>) ListadoCompleto();
     }
-    public boolean crearCarroCompra(CarroCompra carroCompra){
-        boolean subio =false;
 
+    public boolean crearCarroCompra(CarroCompra carroCompra) {
+        boolean subio = false;
+
+        /*
         Connection con = null;
         try {
 
@@ -64,10 +73,12 @@ public class CarroCompraServicios {
                 Logger.getLogger(CarroCompraServicios.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
-        return subio;
+*/
+        return crear(carroCompra);
     }
+    /*
     public boolean addProductoCarroCompra(Producto produ, long ID_CarroCompra){
+
         boolean ok =false;
 
         Connection con = null;
@@ -96,9 +107,21 @@ public class CarroCompraServicios {
         }
 
         return ok;
-    }
+    }*/
 
-    public boolean borrarProductoCarroCompra(long id_carroCompra, long id_producto){
+    public boolean borrarProductoCarroCompra(long id_carroCompra, long id_producto) {
+        CarroCompra aux = getCarroCompra(id_carroCompra);
+        for (CarroCompra_Producto ccp : aux.getListaProductos()
+        ) {
+            if (ccp.getProducto().getId() == id_producto) {
+                new CarroCompra_ProductoServicios().getBorrar(ccp);
+                aux.getListaProductos().remove(ccp);
+
+                return true;
+            }
+        }
+
+        /*
         boolean ok =false;
 
         Connection con = null;
@@ -124,11 +147,20 @@ public class CarroCompraServicios {
             } catch (SQLException ex) {
                 Logger.getLogger(CarroCompraServicios.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
+        }*/
 
-        return ok;
+        return false;
     }
-    public boolean borrarTodoProductoCarroCompra(long id_carroCompra){
+
+    public boolean borrarTodoProductoCarroCompra(long id_carroCompra) {
+        CarroCompra aux = getCarroCompra(id_carroCompra);
+        for (CarroCompra_Producto cpp : aux.getListaProductos()
+        ) {
+            new CarroCompra_ProductoServicios().getBorrar(cpp);
+        }
+        aux.getListaProductos().clear();
+
+        /*
         boolean ok =false;
 
         Connection con = null;
@@ -153,11 +185,12 @@ public class CarroCompraServicios {
             } catch (SQLException ex) {
                 Logger.getLogger(CarroCompraServicios.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
+        }*/
 
-        return ok;
+        return updateCarroCompraProducto(aux);
     }
-    public long getIdentityMax(){
+
+    public long getIdentityMax() {
         long max = -1;
         Connection con = null;
         try {
@@ -169,14 +202,14 @@ public class CarroCompraServicios {
             //Antes de ejecutar seteo los parametros.
             //Ejecuto...
             ResultSet rs = prepareStatement.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 max = rs.getLong(1);
             }
             return max;
 
         } catch (SQLException ex) {
             Logger.getLogger(CarroCompraServicios.class.getName()).log(Level.SEVERE, null, ex);
-        } finally{
+        } finally {
             try {
                 con.close();
             } catch (SQLException ex) {
@@ -187,7 +220,8 @@ public class CarroCompraServicios {
     }
 
     public CarroCompra getCarroCompra(long id) {
-        int carroCompra = 0;
+
+        /*int carroCompra = 0;
         CarroCompra aux = null;
         Connection con = null;
         try {
@@ -219,11 +253,24 @@ public class CarroCompraServicios {
             } catch (SQLException ex) {
                 Logger.getLogger(CarroCompraServicios.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }*/
+        CarroCompra aux = find(id);
+        Set<CarroCompra_Producto> ss = new CarroCompra_ProductoServicios().getListaCarroCompra_Producto(id);
+        try {
+            if (ss != null) {
+                aux.setListaProductos(ss);
+            }
+            return aux;
+        } catch (NullPointerException S) {
+            return aux;
         }
 
-        return aux;
+
     }
-    public boolean updateCarroCompraProducto(Producto produ, long id_CarroCompra){
+
+    public boolean updateCarroCompraProducto(CarroCompra aux) {
+
+        /*
         boolean ok =false;
 
         Connection con = null;
@@ -250,8 +297,8 @@ public class CarroCompraServicios {
             } catch (SQLException ex) {
                 Logger.getLogger(CarroCompraServicios.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
+        }*/
 
-        return ok;
+        return editar(aux);
     }
 }

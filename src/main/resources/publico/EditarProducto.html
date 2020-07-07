@@ -1,0 +1,254 @@
+<!DOCTYPE html >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v4.0.1">
+    <title>Carrito de Compra en Sesion</title>
+    <link rel="icon" href=
+            "/shopping-bag-2-512.gif"
+          type="image/x-icon">
+    <!--<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>-->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../assets/js/vendor/jquery.slim.min.js"><\/script>')</script>
+    <script src="bootstrap-4.5.0-dist/js/bootstrap.bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+            integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+            crossorigin="anonymous"></script>
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/navbar-fixed/">
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.css" rel="stylesheet">
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+    <script>// MDB Lightbox Init
+    $(function () {
+        $("#mdb-lightbox-ui").load("mdb-addons/mdb-lightbox-ui.html");
+    });</script>
+    <!-- Custom styles for this template -->
+    <link href="/signin.css" rel="stylesheet">
+    <link href="/pricing.css" rel="stylesheet">
+    <link href="/navbar-top-fixed.css" rel="stylesheet">
+
+</head>
+<body>
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <a class="navbar-brand" href="#"><img src="/shopping-bag-2-512.gif" height="32" width="32"> Mercado Rapido</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+            aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <form action="/" method="get" class="nav-item active">
+                    <!--<input type="hidden" th:value="Comprar" name="ident">-->
+                    <button class="nav-link btn btn-outline-success_es" type="submit">Comprar<span class="sr-only">(current)</span>
+                    </button>
+                </form>
+            </li>
+            <li class="nav-item active">
+                <form action="/login" method="get" class="nav-item active">
+                    <input type="hidden" th:value="venta" name="ident">
+                    <button class="nav-link btn btn-outline-success_es" type="submit">Ventas Realizadas<span
+                            class="sr-only">(current)</span></button>
+                </form>
+            </li>
+            <li class="nav-item active">
+                <form action="/login" method="get" class="nav-item active">
+                    <input type="hidden" th:value="administrar" name="ident">
+                    <button class="nav-link btn btn-outline-success_es" type="submit">Administrar Productos<span
+                            class="sr-only">(current)</span></button>
+                </form>
+            </li>
+        </ul>
+        <ul class="navbar-nav  mt-2 mt-md-0 ">
+            <li class="nav-item active ">
+                <form action="/login" method="get" class="nav-item active">
+                    <input type="hidden" th:value="${log}" name="ident">
+                    <button class="nav-link btn btn-outline-success_es" type="submit" th:text="${user}">Iniciar
+                        seccion<span class="sr-only">(current)</span></button>
+                </form>
+            </li>
+
+            <li class="nav-item active ">
+                <form class="form-inline mt-2 mt-md-0" method="get" action="\carrito" id="carr">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" form="carr">
+                        Carrito
+                        <svg class="bi bi-cart" width="20" height="20" viewBox="0 0 16 16" fill="currentColor"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                  d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                        </svg>
+                        <a>(</a><a th:text="${cant}"></a><a>)</a>
+                    </button>
+
+                </form>
+            </li>
+        </ul>
+
+
+    </div>
+</nav>
+<main role="main" class="container">
+
+    <div th:style="${venta_producto}">
+
+        <thead>
+        <h1 class="text-center">Editar Producto</h1>
+        </thead>
+
+        <div class="jumbotron ventasProducto" id="ventasProducto" th:style="${venta_producto}"
+             th:id="${producto.id}">
+
+            <table class="table">
+                <tbody>
+                <tr >
+                    <td>
+                        <form method="post" id="editar" action="/edit_now" enctype="multipart/form-data">
+                        <label class="form-inline nav-link " for="nombre" size="1"><font size="3">Nombre del
+                            Producto: </font></label>
+                        <input name="producto" id="nombre" type="text" class="form-control"
+                               th:value="${producto.nombre}">
+                        <a><br></a>
+                        <label for="precio" class="form-inline nav-link " size="1"><font
+                                size="3">Precio: </font></label>
+                        <input name="precio" id="precio" type="number" class="form-control"
+                               th:value="${producto.precio}" min="0.01" step="0.01"
+                               required>
+                        <a><br></a>
+                        <label class="form-inline nav-link ">Descripcion:</label>
+                        <textarea class="form-control" rows="3" form="editar" name="descripcion"
+                                  placeholder="Ingrese una Descripcion" th:text="${producto.descripcion}"
+                                  style="max-width: 467px;"></textarea>
+                        <a><br></a>
+                        <label class="form-inline nav-link " >Subir Imagen</label>
+                        <input type="hidden" name="id_producto" th:value="${producto.id}">
+                        <input class="form-control" type="file" name="foto" multiple
+                               placeholder="Subir imagen" accept="image/*" style="max-width: 300px;">
+                    </form>
+                    </td>
+
+                </tr>
+                <tr><a><br></a></tr>
+                <tr>
+
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Last</th>
+                            <th scope="col">Accion</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="picture : ${producto.fotos}">
+                            <th th:text="${picture.id}" scope="row"></th>
+                            <td th:text="${picture.nombre}">Nombre Foto</td>
+                            <td th:text="${picture.mimeType}">PNG</td>
+                            <td>
+
+                                <a th:text="Visualizar"
+                                   class="btn btn-secondary" th:attr="data-target='#modal'+${picture.id}" data-toggle="modal"> </a>
+                                <a th:text="Eliminar" th:href="'eliminar/'+${picture.id}+'/'+${producto.id}" th class="btn btn-danger"></a>
+
+
+
+
+                            </td>
+                            <div class="col-lg-4 col-md-12 mb-4">
+
+                                <!--Modal: Name-->
+                                <div class="modal fade" th:id="'modal'+${picture.id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                                     aria-hidden="true">
+                                    <div class="modal-dialog modal-lg" role="document">
+
+                                        <!--Content-->
+                                        <div class="modal-content">
+
+                                            <!--Body-->
+                                            <div class="modal-body mb-0 p-0">
+
+                                                <div class="embed-responsive embed-responsive-16by9 z-depth-1-half">
+                                                    <iframe class="embed-responsive-item" th:src="@{'data:'+${picture.getMimeType()}+';base64,'+${picture.getFotoBase64()}}"
+                                                            allowfullscreen></iframe>
+                                                </div>
+
+                                            </div>
+
+                                            <!--Footer-->
+                                            <div class="modal-footer justify-content-center">
+                                                <span class="mr-4">Spread the word!</span>
+                                                <button type="button" class="btn btn-outline-primary btn-rounded btn-md ml-4"
+                                                        data-dismiss="modal">Close
+                                                </button>
+
+                                            </div>
+
+                                        </div>
+                                        <!--/.Content-->
+
+                                    </div>
+                                </div>
+                                <!--Modal: Name-->
+
+                                <!--<a><img class="img-fluid z-depth-1" src="https://mdbootstrap.com/img/screens/yt/screen-video-1.jpg" alt="video"
+                                        data-toggle="modal" data-target="#modal1"></a>-->
+
+                            </div>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </tr>
+                </tbody>
+            </table>
+
+            <table class="table">
+                <tbody>
+                <tr>
+                    <form method="post" form="editar" enctype="multipart/form-data">
+                        <td><input name="id_accion" type="submit" value="Guardar"
+                                   class="btn btn-lg btn-primary text-center form-control mr-sm-2" form="editar"></td>
+                        <td><input name="id_accion" class="btn btn-lg btn-primary_es text-center form-control mr-sm-2"
+                                   type="submit"
+                                   value="Cancelar"></td>
+                    </form>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+
+</main>
+
+
+</body>
+</html>

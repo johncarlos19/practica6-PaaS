@@ -2,6 +2,7 @@ package controladorServer;
 
 import logico.CarroCompra;
 import logico.Producto;
+import logico.ProductoComprado;
 import logico.VentasProductos;
 
 import java.sql.*;
@@ -9,9 +10,14 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class VentasProductosServicios {
+public class VentasProductosServicios extends GestionadDB<VentasProductos> {
 
-    public ArrayList<VentasProductos> listaVentasProductos(){
+    public VentasProductosServicios() {
+        super(VentasProductos.class);
+    }
+
+    public ArrayList<VentasProductos> listaVentasProductos() {
+        /*
         ArrayList<VentasProductos> list = new ArrayList<>();
         Connection con = null; //objeto conexion.
         try {
@@ -23,7 +29,7 @@ public class VentasProductosServicios {
             ResultSet rs = prepareStatement.executeQuery();
             while(rs.next()){
                 VentasProductos ventasProductos = new VentasProductos(rs.getLong("ID"),rs.getDate("FECHACOMPRA"),rs.getString("NOMBRECLIENTE"));
-                ventasProductos.setListaProducto(new ProductoServicios().listaProductoVentasProductos(ventasProductos.getId()));
+                ventasProductos.setListaProducto(new ProductoCompradoServicios().listaProductoVentasProductos(ventasProductos.getId()));
                 list.add(ventasProductos);
             }
         } catch (SQLException ex) {
@@ -34,10 +40,12 @@ public class VentasProductosServicios {
             } catch (SQLException ex) {
                 Logger.getLogger(VentasProductosServicios.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        return list;
+        }*/
+        return (ArrayList<VentasProductos>) ListadoCompleto();
     }
-    public VentasProductos crearVentasProductos(VentasProductos ventasProductos){
+
+    public boolean crearVentasProductos(VentasProductos ventasProductos) {
+        /*
         boolean subio =false;
         VentasProductos ven = null;
         Connection con = null;
@@ -66,7 +74,7 @@ public class VentasProductosServicios {
             }
             ven.setId(id);
             ven.setFechaCompra(dd);
-            for (Producto aux: ventasProductos.getListaProducto()) {
+            for (ProductoComprado aux: ventasProductos.getListaProducto()) {
                 addProductoComprado(aux,id);
 
             }
@@ -80,11 +88,12 @@ public class VentasProductosServicios {
                 Logger.getLogger(CarroCompraServicios.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
-        return ven;
+*/
+        return crear(ventasProductos);
     }
-    private boolean addProductoComprado(Producto produ, long ID_VentasProductos){
-        boolean ok =false;
+
+    private boolean addProductoComprado(ProductoComprado produ, long ID_VentasProductos) {
+        boolean ok = false;
 
         Connection con = null;
         try {
@@ -103,7 +112,7 @@ public class VentasProductosServicios {
             prepareStatement = con.prepareStatement(query);
             ResultSet rs = prepareStatement.executeQuery();
             long id = 0;
-            while(rs.next()){
+            while (rs.next()) {
                 id = rs.getLong(1);
             }
             query = "insert into VENTASPRODUCTOPRODUCTOCOMPRADO(IdVentasProducto, IdProducto, Cantidad, Nombre, Precio) VALUES ( ?, ?, ?, ?, ? );";
@@ -116,11 +125,11 @@ public class VentasProductosServicios {
             prepareStatement.setString(4, produ.getNombre());
             prepareStatement.setBigDecimal(5, produ.getPrecio());
             fila = prepareStatement.executeUpdate();
-            ok = fila > 0 ;
+            ok = fila > 0;
 
         } catch (SQLException ex) {
             Logger.getLogger(CarroCompraServicios.class.getName()).log(Level.SEVERE, null, ex);
-        } finally{
+        } finally {
             try {
                 con.close();
             } catch (SQLException ex) {
@@ -131,8 +140,36 @@ public class VentasProductosServicios {
         return ok;
     }
 
+    public Date getDateCurrent() {
+        java.util.Date max = null;
+        Connection con = null;
+        try {
+            //utilizando los comodines (?)...
+            String query = "select CURRENT_TIMESTAMP";
+            con = DataBaseServices.getInstancia().getConexion();
+            //
+            PreparedStatement prepareStatement = con.prepareStatement(query);
+            //Antes de ejecutar seteo los parametros.
+            //Ejecuto...
+            ResultSet rs = prepareStatement.executeQuery();
+            while (rs.next()) {
+                max = rs.getDate(1);
+            }
+            return (Date) max;
 
-    public long getIdentityMax(){
+        } catch (SQLException ex) {
+            Logger.getLogger(CarroCompraServicios.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(CarroCompraServicios.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
+
+    public long getIdentityMax() {
         long max = -1;
         Connection con = null;
         try {
@@ -144,14 +181,14 @@ public class VentasProductosServicios {
             //Antes de ejecutar seteo los parametros.
             //Ejecuto...
             ResultSet rs = prepareStatement.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 max = rs.getLong(1);
             }
             return max;
 
         } catch (SQLException ex) {
             Logger.getLogger(CarroCompraServicios.class.getName()).log(Level.SEVERE, null, ex);
-        } finally{
+        } finally {
             try {
                 con.close();
             } catch (SQLException ex) {

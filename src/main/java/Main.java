@@ -1,7 +1,4 @@
-import controladorServer.DataBaseControlador;
-import controladorServer.DataBaseServices;
-import controladorServer.ProductoServicios;
-import controladorServer.RecibirDatosControlador;
+import controladorServer.*;
 import io.javalin.Javalin;
 import io.javalin.core.util.RouteOverviewPlugin;
 import io.javalin.plugin.rendering.JavalinRenderer;
@@ -17,12 +14,13 @@ public class Main {
 
         DataBaseControlador.startDb();
 
+
         //Prueba de Conexión.
         DataBaseServices.getInstancia().testConexion();
-
-        DataBaseControlador.crearTablas();
+        CarroCompraServicios carroCompraServicios = new CarroCompraServicios();
+        //DataBaseControlador.crearTablas();
         Mercado.getInstance().loadDataBase();
-        System.out.println(new ProductoServicios().getIdentityMax());
+        //System.out.println(new ProductoServicios().getIdentityMax());
 
         //Mercado.getInstance().agregar_Producto("Pan", BigDecimal.valueOf(500));
         //Mercado.getInstance().agregar_Producto("Ajo", BigDecimal.valueOf(20));
@@ -39,6 +37,7 @@ public class Main {
             config.addStaticFiles("/publico/login");
             config.addStaticFiles("/publico/bootstrap-4.5.0-dist");
             config.addStaticFiles("/publico/css");
+            config.addStaticFiles("/publico/img");
             config.registerPlugin(new RouteOverviewPlugin("/rutas")); //aplicando plugins de las rutas
         }).start(getHerokuAssignedPort());
         registrandoPlantillas();

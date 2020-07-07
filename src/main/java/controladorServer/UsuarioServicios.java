@@ -11,9 +11,14 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class UsuarioServicios {
+public class UsuarioServicios extends GestionadDB<Usuario> {
 
-    public ArrayList<Usuario> listaUsuario(){
+    public UsuarioServicios() {
+        super(Usuario.class);
+    }
+
+    public ArrayList<Usuario> listaUsuario() {
+        /*
         ArrayList<Usuario> list = new ArrayList<>();
         Connection con = null; //objeto conexion.
         try {
@@ -36,12 +41,13 @@ public class UsuarioServicios {
             } catch (SQLException ex) {
                 Logger.getLogger(UsuarioServicios.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        return list;
+        }*/
+        return (ArrayList<Usuario>) ListadoCompleto();
     }
-    public boolean crearUsuario(Usuario user){
-        boolean subio =false;
 
+    public boolean crearUsuario(Usuario user) {
+        boolean subio = false;
+/*
         Connection con = null;
         try {
 
@@ -65,13 +71,14 @@ public class UsuarioServicios {
             } catch (SQLException ex) {
                 Logger.getLogger(UsuarioServicios.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
+        }*/
 
-        return subio;
+        return crear(user);
     }
-    public boolean updateProducto(Usuario user){
-        boolean ok =false;
 
+    public boolean updateProducto(Usuario user) {
+        boolean ok = false;
+        /*
         Connection con = null;
         try {
 
@@ -95,11 +102,13 @@ public class UsuarioServicios {
             } catch (SQLException ex) {
                 Logger.getLogger(UsuarioServicios.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
+        }*/
 
-        return ok;
+        return editar(user);
     }
-        public Usuario getUsuario(String us) {
+
+    public Usuario getUsuario(String us) {
+        /*
         Usuario user = null;
         Connection con = null;
         try {
@@ -125,8 +134,8 @@ public class UsuarioServicios {
             } catch (SQLException ex) {
                 Logger.getLogger(UsuarioServicios.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
+        }*/
 
-        return user;
+        return find(us);
     }
 }

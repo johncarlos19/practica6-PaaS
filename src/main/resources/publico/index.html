@@ -1,288 +1,298 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v4.0.1">
     <title>Carrito de Compra en Sesion</title>
-    <link rel = "icon" href =
+    <link rel="icon" href=
             "img/shopping-bag-2-512.gif"
-          type = "image/x-icon">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+          type="image/x-icon">
+    <!--<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>-->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../assets/js/vendor/jquery.slim.min.js"><\/script>')</script>
+    <script src="bootstrap-4.5.0-dist/js/bootstrap.bundle.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+            integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+            crossorigin="anonymous"></script>
     <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/navbar-fixed/">
 
     <!-- Bootstrap core CSS -->
-<link href="bootstrap-4.5.0-dist/css/bootstrap.css" rel="stylesheet">
-    <link href="login/signin.css">
+    <link href="bootstrap-4.5.0-dist/css/bootstrap.css" rel="stylesheet">
 
     <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-      }
-
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
-      }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
     </style>
     <!-- Custom styles for this template -->
+    <link href="login/signin.css" rel="stylesheet">
+    <link href="css/pricing.css" rel="stylesheet">
     <link href="css/navbar-top-fixed.css" rel="stylesheet">
-  </head>
-  <body>
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark text-nowrap">
-  <a class="navbar-brand" href="#"><img src="img/shopping-bag-2-512.gif" height="32" width="32"> Mercado Rapido</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarCollapse">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <form action="/" method="get" class="nav-item active">
-          <!--<input type="hidden" th:value="Comprar" name="ident">-->
-          <button class="nav-link btn btn-outline-success_es" type="submit">Comprar<span class="sr-only">(current)</span></button>
-        </form>
-      </li>
-      <li class="nav-item active">
-        <form action="/login" method="get" class="nav-item active">
-          <input type="hidden" th:value="venta" name="ident">
-          <button class="nav-link btn btn-outline-success_es" type="submit">Ventas Realizadas<span class="sr-only">(current)</span></button>
-        </form>
-      </li>
-      <li class="nav-item active">
-        <form action="/login" method="get" class="nav-item active">
-          <input type="hidden" th:value="administrar" name="ident">
-          <button class="nav-link btn btn-outline-success_es" type="submit">Administrar Productos<span class="sr-only">(current)</span></button>
-        </form>
-      </li>
-    </ul>
-    <ul class="navbar-nav  mt-2 mt-md-0 ">
-      <li class="nav-item active ">
-        <form action="/login" method="get" class="nav-item active">
-          <input type="hidden" th:value="${log}" name="ident">
-          <button class="nav-link btn btn-outline-success_es" type="submit" th:text="${user}">Iniciar seccion<span class="sr-only">(current)</span></button>
-        </form>
-      </li>
 
-      <li class="nav-item active ">
-        <form class="form-inline mt-2 mt-md-0" method="get" action="\carrito" id="carr">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit" form="carr">
-            Carrito<svg class="bi bi-cart" width="20" height="20" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path fill-rule="evenodd" d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
-          </svg><a>(</a><a th:text="${cant}"></a><a>)</a>
-          </button>
+</head>
+<body>
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <a class="navbar-brand" href="#"><img src="img/shopping-bag-2-512.gif" height="32" width="32"> Mercado Rapido</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+            aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <form action="/" method="get" class="nav-item active">
+                    <!--<input type="hidden" th:value="Comprar" name="ident">-->
+                    <button class="nav-link btn btn-outline-success_es" type="submit">Comprar<span class="sr-only">(current)</span>
+                    </button>
+                </form>
+            </li>
+            <li class="nav-item active">
+                <form action="/login" method="get" class="nav-item active">
+                    <input type="hidden" th:value="venta" name="ident">
+                    <button class="nav-link btn btn-outline-success_es" type="submit">Ventas Realizadas<span
+                            class="sr-only">(current)</span></button>
+                </form>
+            </li>
+            <li class="nav-item active">
+                <form action="/login" method="get" class="nav-item active">
+                    <input type="hidden" th:value="administrar" name="ident">
+                    <button class="nav-link btn btn-outline-success_es" type="submit">Administrar Productos<span
+                            class="sr-only">(current)</span></button>
+                </form>
+            </li>
+        </ul>
+        <ul class="navbar-nav  mt-2 mt-md-0 ">
+            <li class="nav-item active ">
+                <form action="/login" method="get" class="nav-item active">
+                    <input type="hidden" th:value="${log}" name="ident">
+                    <button class="nav-link btn btn-outline-success_es" type="submit" th:text="${user}">Iniciar
+                        seccion<span class="sr-only">(current)</span></button>
+                </form>
+            </li>
 
-        </form>
-      </li>
-    </ul>
+            <li class="nav-item active ">
+                <form class="form-inline mt-2 mt-md-0" method="get" action="\carrito" id="carr">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" form="carr">
+                        Carrito
+                        <svg class="bi bi-cart" width="20" height="20" viewBox="0 0 16 16" fill="currentColor"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                  d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                        </svg>
+                        <a>(</a><a th:text="${cant}"></a><a>)</a>
+                    </button>
+
+                </form>
+            </li>
+        </ul>
 
 
-  </div>
+    </div>
 </nav>
 
-<main role="main" class="container text-nowrap" >
-  <div class="jumbotron" th:style="${compra}">
-    <h1 class="text-center">Lista De Productos</h1>
-    <table class="table">
-      <thead class="thead-dark">
-      <tr>
-        <th scope="col">Producto</th>
-        <th scope="col">Precio (RD$)</th>
-        <th scope="col">Cantidad</th>
-        <th scope="col">Acci&#243n</th>
-      </tr>
-      </thead>
-      <tbody>
-      <!--/*@thymesVar id="listaProducto" type="logico.Mercado"*/-->
-      <tr th:each="product : ${listaProducto}">
-
-        <form method="get" action="/add" th:id="${product.id}">
-          <th th:text="${product.nombre}" scope="row"></th>
-          <td th:text="${product.precio}" step="0.01">Queso</td>
-          <td>
-            <input name="id" type="hidden" th:value="${product.id}">
-            <input name="cantidad" class="form-control mr-sm-2" type="number" value="1" min="1" required>
-          </td>
-          <td><button class="btn btn-lg btn-primary" type="submit" th:form="${product.id}">Agregar &raquo;</button></td>
-        </form>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-  <!--th:style="${administrar}"-->
-  <div class="jumbotron administrar" id="administrar" th:style="${administrar}">
-    <h1 class="text-center">Productos Agregados</h1>
-    <table class="table">
-      <thead class="thead-dark">
-      <tr>
-        <th scope="col">Producto</th>
-        <th scope="col">Precio (RD$)</th>
-        <th scope="col">Acci&#243n</th>
-      </tr>
-      </thead>
-      <tbody>
-      <!--/*@thymesVar id="listaProducto" type="logico.Mercado"*/-->
-      <tr th:each="product : ${listaProducto}">
-
-        <form th:id="${product.id}+'administrar'" method="get" action="\edit" >
-          <th><input th:value="${product.nombre}" scope="row" type="text" name="nombre"></th>
-          <td><input  th:value="${product.precio}" name="precio" step="0.01"></td>
-          <td>
-            <input name="id" type="hidden" th:value="${product.id}">
-            <input name="id_accion" class="btn btn-lg btn-primary" th:id="${product.id}+'edit'" th:form="${product.id}+'administrar'" type="submit" value="Editar">
-            <input name="id_accion" class="btn btn-lg btn-primary_es" th:id="${product.id}+'dele'" th:form="${product.id}+'administrar'" type="submit" value="Eliminar"></input></td>
-        </form>
-      </tr>
-      </tbody>
-    </table>
-    <button class="btn btn-lg btn-outline-success text-right" type="submit" onclick="gfg_Run()">Agregar &raquo;</button>
-  </div>
-  <div class="agregar text-center jumbotron" id="agre" style="display: none">
-    <h2>Agregar Productos</h2>
-    <form action="/new_product" class="form-signin" method="get">
-      <input class="form-control" type="text" name="producto" placeholder="Nombre" required >
-      <input class="form-control" type="number" name="precio" placeholder="Precio" min="0.01" step="0.01" required>
-      <button type="submit" class="btn btn-lg btn-primary btn-block" >Agregar</button>
-    </form>
-  </div>
+<main role="main" class="container">
 
 
-
-
-  <div class="jumbotron carrito" id="carrito" th:style="${carrito}">
-    <h1 class="text-center">Carrito De Compra</h1>
-    <form class="form-inline mt-2 mt-md-0" id="nombre_todo" method="get" action="\carrito_process" >
-      <h2 class="form-inline" size="1" ><font size="3">Nombre del Cliente: </font></h2>
-
-      <input name="nombre" class="form-control mr-sm-2" placeholder="Nombre Del cliente" aria-label="Search" required>
-    </form>
-    <a th:text="${procee}" style="color: red"><br></a>
-    <a><br></a>
-    <table class="table">
-      <thead class="thead-dark">
-      <tr>
-        <th scope="col">Producto</th>
-        <th scope="col">Precio (RD$)</th>
-        <th scope="col">Cantidad</th>
-        <th scope="col">Total</th>
-        <th scope="col">Acci&#243n</th>
-      </tr>
-      </thead>
-      <tbody>
-      <!--/*@thymesVar id="listaProducto" type="logico.Mercado"*/-->
-      <tr th:each="product : ${carroProducto.listaProductos}">
-
-        <form th:id="${product.id}+'carrito'" method="get" action="\carrito_process" >
-          <th  th:text="${product.nombre}" scope="row"></th>
-          <td  th:text="${product.precio}" step="0.01"></td>
-          <td th:text="${product.cantidad}"></td>
-          <td th:text="${product.total}"></td>
-            <td>
-              <input name="id" type="hidden" th:value="${product.id}">
-              <input name="id_accion" class="btn btn-lg btn-primary_es" th:id="${product.id}+'dele'" th:form="${product.id}+'carrito'" type="submit" value="Eliminar"></td>
-        </form>
-      </tr>
-      </tbody>
-    </table>
-    <table class="text-center table">
-      <tr>
-        <td></td>
-        <td>
-          <h2 class="text-right" th:text=" 'Total: ' + ${carroProducto.totalAcumulado}"><font size="3"></h2>
-        </td>
-      </tr>
-      <tr>
-        <form method="get" action="\carrito_process" form="nombre_todo">
-          <td><input name="id_accion" type="submit" value="Procesar Compra" class="btn btn-lg btn-outline-success text-right" form="nombre_todo"></td>
-          <td><input name="id_accion"  class="btn btn-lg btn-outline-success text-right" type="submit" value="Eliminar Todo los Articulos"></td>
-        </form>
-      </tr>
-    </table>
-  </div>
-  <div class="jumbotron carrito" th:style="${carrito_hecho}" >
-    <h1 class="text-left">Gracias por realizar la compra<br></h1>
-    <form action="/" method="get" class="nav-item active">
-      <input type="hidden" th:value="Comprar" name="ident">
-      <button class="nav-link btn btn-outline-success_es" type="submit">Volver Al Inicio<span class="sr-only">(current)</span></button>
-    </form>
-  </div>
-
-
-
-  <div th:style="${venta_producto}">
-    <table class="table">
-      <thead>
-      <h1 class="text-center">Ventas de Productos</h1>
-      </thead>
-      <tbody th:each="venta : ${listaVenta}">
-      <tr>
-      <td>
-      <div class="jumbotron ventasProducto" id="ventasProducto" th:style="${venta_producto}" th:id="${venta.id}">
+    <!--th:style="${administrar}"-->
+    <div class="jumbotron administrar" id="administrar" th:style="${administrar}">
+        <h1 class="text-center">Productos Agregados</h1>
         <table class="table">
-          <tbody>
-          <tr>
-            <td>
-              <h2 class="form-inline nav-link " size="1" ><font size="3">Nombre del Cliente: </font></h2>
-              <a name="nombre" class="form-control btn-outline-success nav-link" th:text="${venta.nombreCliente}"></a>
-            </td>
-            <td>
-              <h2 class="form-inline nav-link " size="1" ><font size="3">Fecha: </font></h2>
-              <a name="nombre" class="form-control btn-outline-success nav-link" th:text="${venta.fechaCompra}" ></a>
-            </td>
-          </tr>
-          </tbody>
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">Producto</th>
+                <th scope="col">Precio (RD$)</th>
+                <th scope="col">Acci&#243n</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!--/*@thymesVar id="listaProducto" type="logico.Mercado"*/-->
+            <tr th:each="product : ${listaProducto}">
+
+                <form th:id="${product.id}+'administrar'" method="get" action="\doItChange">
+                    <th><input th:value="${product.nombre}" scope="row" type="text" name="nombre"></th>
+                    <td><input th:value="${product.precio}" name="precio" step="0.01"></td>
+                    <td>
+                        <input name="id" type="hidden" th:value="${product.id}">
+                        <input name="id_accion" class="btn btn-lg btn-primary" th:id="${product.id}+'edit'"
+                               th:form="${product.id}+'administrar'" type="submit" value="Editar">
+                        <input name="id_accion" class="btn btn-lg btn-primary_es" th:id="${product.id}+'dele'"
+                               th:form="${product.id}+'administrar'" type="submit" value="Eliminar"></input></td>
+                </form>
+            </tr>
+            </tbody>
         </table>
+        <button class="btn btn-lg btn-outline-success text-right" type="submit" onclick="gfg_Run()">Agregar &raquo;
+        </button>
+    </div>
+    <div class="agregar text-center jumbotron" id="agre" style="display: none">
+        <h2>Agregar Productos</h2>
+        <form action="/new_product" class="form-signin" method="post" enctype="multipart/form-data">
+            <input class="form-control" type="text" name="producto" placeholder="Nombre" required>
+            <input class="form-control" type="number" name="precio" placeholder="Precio" min="0.01" step="0.01"
+                   required>
+            <textarea class="form-control" rows="3" name="descripcion" placeholder="Ingrese una Descripcion"></textarea>
+            <input class="form-control" type="file" name="foto" multiple placeholder="Subir imagen" accept="image/*">
+            <button type="submit" class="btn btn-lg btn-primary btn-block">Agregar</button>
+        </form>
+    </div>
+
+
+    <div class="jumbotron carrito" id="carrito" th:style="${carrito}">
+        <h1 class="text-center">Carrito De Compra</h1>
+        <form class="form-inline mt-2 mt-md-0" id="nombre_todo" method="get" action="\carrito_process">
+            <h2 class="form-inline" size="1"><font size="3">Nombre del Cliente: </font></h2>
+
+            <input name="nombre" class="form-control mr-sm-2" placeholder="Nombre Del cliente" aria-label="Search"
+                   required>
+        </form>
+        <a th:text="${procee}" style="color: red"><br></a>
         <a><br></a>
-        <table class="table" th:form="${venta.id}">
-          <thead class="thead-dark">
-          <tr>
-            <th scope="col">Producto</th>
-            <th scope="col">Precio (RD$)</th>
-            <th scope="col">Cantidad</th>
-            <th scope="col">Total</th>
-          </tr>
-          </thead>
-          <tbody>
-          <!--/*@thymesVar id="listaProducto" type="logico.Mercado"*/-->
-          <tr th:each="produ : ${venta.listaProducto}">
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">Producto</th>
+                <th scope="col">Precio (RD$)</th>
+                <th scope="col">Cantidad</th>
+                <th scope="col">Total</th>
+                <th scope="col">Acci&#243n</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!--/*@thymesVar id="listaProducto" type="logico.Mercado"*/-->
+            <tr th:each="product : ${carroProducto.listaProductos}">
 
-            <form th:id="${produ.id}+'venta'" method="get" >
-              <th  th:text="${produ.nombre}" scope="row"></th>
-              <td  th:text="${produ.precio}" step="0.01"></td>
-              <td th:text="${produ.cantidad}"></td>
-              <td th:text="${produ.total}"></td>
-            </form>
-          </tr>
-          <tr>
-            <td class="text-right"></td>
-            <td>
-              <h2 class="text-right" th:text=" 'Total: ' + ${venta.totalAcumulado}"><font size="3"></h2>
-            </td>
-          </tr>
-          </tbody>
+                <form th:id="${product.producto.id}+'carrito'" method="get" action="\carrito_process">
+                    <th th:text="${product.producto.nombre}" scope="row"></th>
+                    <td th:text="${product.producto.precio}" step="0.01"></td>
+                    <td th:text="${product.cantidad}"></td>
+                    <td th:text="${product.total}"></td>
+                    <td>
+                        <input name="id" type="hidden" th:value="${product.producto.id}">
+                        <input name="id_accion" class="btn btn-lg btn-primary_es" th:id="${product.producto.id}+'dele'"
+                               th:form="${product.producto.id}+'carrito'" type="submit" value="Eliminar"></td>
+                </form>
+            </tr>
+            </tbody>
         </table>
-      </div>
-      </td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-  <script>
+        <table class="text-center table">
+            <tr>
+                <td></td>
+                <td>
+                    <h2 class="text-right" th:text=" 'Total: ' + ${carroProducto.totalAcumulado}"><font size="3"></h2>
+                </td>
+            </tr>
+            <tr>
+                <form method="get" action="\carrito_process" form="nombre_todo">
+                    <td><input name="id_accion" type="submit" value="Procesar Compra"
+                               class="btn btn-lg btn-outline-success text-right" form="nombre_todo"></td>
+                    <td><input name="id_accion" class="btn btn-lg btn-outline-success text-right" type="submit"
+                               value="Eliminar Todo los Articulos"></td>
+                </form>
+            </tr>
+        </table>
+    </div>
+    <div class="jumbotron carrito" th:style="${carrito_hecho}">
+        <h1 class="text-left">Gracias por realizar la compra<br></h1>
+        <form action="/" method="get" class="nav-item active">
+            <input type="hidden" th:value="Comprar" name="ident">
+            <button class="nav-link btn btn-outline-success_es" type="submit">Volver Al Inicio<span class="sr-only">(current)</span>
+            </button>
+        </form>
+    </div>
 
-    function gfg_Run() {
-      document.getElementById('agre').style.display = 'block';
-      document.getElementById('administrar').style.display = 'none';
-    }
 
-  </script>
+    <div th:style="${venta_producto}">
+        <table class="table">
+            <thead>
+            <h1 class="text-center">Ventas de Productos</h1>
+            </thead>
+            <tbody th:each="venta : ${listaVenta}">
+            <tr>
+                <td>
+                    <div class="jumbotron ventasProducto" id="ventasProducto" th:style="${venta_producto}"
+                         th:id="${venta.id}">
+                        <table class="table">
+                            <tbody>
+                            <tr class="">
+                                <td>
+                                    <h2 class="form-inline nav-link " size="1"><font size="3">Cliente: </font></h2>
+                                    <a name="nombre" class="form-control btn-outline-success nav-link"
+                                       th:text="${venta.nombreCliente}"></a>
+                                </td>
+                                <td>
+                                    <h2 class="form-inline nav-link " size="1"><font size="3">Fecha: </font></h2>
+                                    <a name="nombre" class="form-control btn-outline-success nav-link"
+                                       th:text="${venta.fechaCompra}"></a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <a><br></a>
+                        <table class="table" th:form="${venta.id}">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Producto</th>
+                                <th scope="col">Precio (RD$)</th>
+                                <th scope="col">Cantidad</th>
+                                <th scope="col">Total</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!--/*@thymesVar id="listaProducto" type="logico.Mercado"*/-->
+                            <tr th:each="produ : ${venta.listaProducto}">
+
+                                <form th:id="${produ.id}+'venta'" method="get">
+                                    <th th:text="${produ.nombre}" scope="row"></th>
+                                    <td th:text="${produ.precio}" step="0.01"></td>
+                                    <td th:text="${produ.cantidad}"></td>
+                                    <td th:text="${produ.total}"></td>
+                                </form>
+                            </tr>
+                            <tr>
+                                <td class="text-right"></td>
+                                <td>
+                                    <h2 class="text-right" th:text=" 'Total: ' + ${venta.totalAcumulado}"><font
+                                            size="3"></h2>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+
+        function gfg_Run() {
+            document.getElementById('agre').style.display = 'block';
+            document.getElementById('administrar').style.display = 'none';
+        }
+
+    </script>
 </main>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-      <script>window.jQuery || document.write('<script src="../assets/js/vendor/jquery.slim.min.js"><\/script>')</script><script src="bootstrap-4.5.0-dist/js/bootstrap.bundle.js"></script></body>
+</body>
 </html>
