@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'application'
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
 }
 
 version '1.0-SNAPSHOT'
@@ -28,4 +29,12 @@ dependencies {
     compile 'org.hibernate:hibernate-entitymanager:5.4.18.Final'
     //compile group: 'org.hibernate.orm', name: 'hibernate-entitymanager', version: '5.4.18.Final'
     compile 'com.h2database:h2:1.4.200'
+}
+shadowJar{
+    baseName = 'app'
+    classifier = ''
+    archiveVersion = ''
+}
+task stage {
+    dependsOn shadowJar
 }
