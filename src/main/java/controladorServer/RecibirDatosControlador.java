@@ -319,9 +319,14 @@ public class RecibirDatosControlador extends JavalinControlador {
                 try {
                     byte[] bytes = uploadedFile.getContent().readAllBytes();
                     String encodedString = Base64.getEncoder().encodeToString(bytes);
-                    Foto foto = new Foto(uploadedFile.getFilename(), uploadedFile.getContentType(), encodedString);
+                    String mimeType = uploadedFile.getContentType();
+                    if (mimeType.equalsIgnoreCase("application/octet-stream") !=true){
+                        Foto foto = new Foto(uploadedFile.getFilename(),mimeType , encodedString);
+                        listaFoto.add(foto);
+                    }
 
-                    listaFoto.add(foto);
+
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -432,9 +437,12 @@ public class RecibirDatosControlador extends JavalinControlador {
                 try {
                     byte[] bytes = uploadedFile.getContent().readAllBytes();
                     String encodedString = Base64.getEncoder().encodeToString(bytes);
-                    Foto foto = new Foto(uploadedFile.getFilename(), uploadedFile.getContentType(), encodedString);
+                    String mimeType = uploadedFile.getContentType();
+                    if (mimeType.equalsIgnoreCase("application/octet-stream") !=true){
+                        Foto foto = new Foto(uploadedFile.getFilename(),mimeType , encodedString);
+                        listaFoto.add(foto);
+                    }
 
-                    listaFoto.add(foto);
 
                 } catch (IOException e) {
                     e.printStackTrace();
