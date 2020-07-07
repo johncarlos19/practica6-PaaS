@@ -129,7 +129,7 @@
                 <tbody>
                 <tr >
                     <td>
-                        <form method="post" id="editar" action="/edit_now" enctype="multipart/form-data">
+                        <form method="post" id="editarProducto" action="/edit_now" enctype="multipart/form-data">
                         <label class="form-inline nav-link " for="nombre" size="1"><font size="3">Nombre del
                             Producto: </font></label>
                         <input name="producto" id="nombre" type="text" class="form-control"
@@ -142,7 +142,7 @@
                                required>
                         <a><br></a>
                         <label class="form-inline nav-link ">Descripcion:</label>
-                        <textarea class="form-control" rows="3" form="editar" name="descripcion"
+                        <textarea class="form-control" rows="3" name="descripcion"
                                   placeholder="Ingrese una Descripcion" th:text="${producto.descripcion}"
                                   style="max-width: 467px;"></textarea>
                         <a><br></a>
@@ -232,9 +232,9 @@
             <table class="table">
                 <tbody>
                 <tr>
-                    <form method="post" form="editar" enctype="multipart/form-data">
+                    <form method="post" form="editarProducto" enctype="multipart/form-data">
                         <td><input name="id_accion" type="submit" value="Guardar"
-                                   class="btn btn-lg btn-primary text-center form-control mr-sm-2" form="editar"></td>
+                                   class="btn btn-lg btn-primary text-center form-control mr-sm-2" form="editarProducto"></td>
                         <td><input name="id_accion" class="btn btn-lg btn-primary_es text-center form-control mr-sm-2"
                                    type="submit"
                                    value="Cancelar"></td>
