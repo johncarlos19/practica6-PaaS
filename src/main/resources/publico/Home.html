@@ -216,7 +216,7 @@
     </div>
     <footer aria-label="Page navigation example">
 
-        <ul class="pagination pagination-sm justify-content-sm-center">
+        <ul class="pagination pagination-sm justify-content-sm-center" th:unless="${pagina == 0}">
             <th:block th:each="posi : ${#numbers.sequence(1, pagina,1)}">
             <li class="page-item disabled" th:if="${posi == page}">
                 <a class="page-link" th:href="'/?page='+${posi}" th:text="${posi}">1</a>
