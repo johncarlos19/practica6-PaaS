@@ -127,7 +127,7 @@
             </tr>
             </thead>
             <tbody>
-            <!--/*@thymesVar id="listaProducto" type="logico.Mercado"*/-->
+            <!--/*@thymesVar id="listaProducto" type="CarroCompra.logico.Mercado"*/-->
             <tr th:each="product : ${listaProducto}">
 
                 <form th:id="${product.id}+'administrar'" method="get" action="\doItChange">
@@ -180,7 +180,7 @@
             </tr>
             </thead>
             <tbody>
-            <!--/*@thymesVar id="listaProducto" type="logico.Mercado"*/-->
+            <!--/*@thymesVar id="listaProducto" type="CarroCompra.logico.Mercado"*/-->
             <tr th:each="product : ${carroProducto.listaProductos}">
 
                 <form th:id="${product.producto.id}+'carrito'" method="get" action="\carrito_process">
@@ -260,7 +260,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <!--/*@thymesVar id="listaProducto" type="logico.Mercado"*/-->
+                            <!--/*@thymesVar id="listaProducto" type="CarroCompra.logico.Mercado"*/-->
                             <tr th:each="produ : ${venta.listaProducto}">
 
                                 <form th:id="${produ.id}+'venta'" method="get">
