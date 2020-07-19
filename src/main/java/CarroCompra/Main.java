@@ -29,7 +29,7 @@ public class Main {
 
 
         //Prueba de Conexión.
-        DataBaseServices.getInstancia().testConexion();
+        //DataBaseServices.getInstancia().testConexion();
         CarroCompraServicios carroCompraServicios = new CarroCompraServicios();
         //DataBaseControlador.crearTablas();
 
