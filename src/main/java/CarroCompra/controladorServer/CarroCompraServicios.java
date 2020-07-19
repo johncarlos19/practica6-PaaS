@@ -3,10 +3,16 @@ package CarroCompra.controladorServer;
 import CarroCompra.logico.CarroCompra;
 import CarroCompra.logico.CarroCompra_Producto;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaQuery;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -189,7 +195,29 @@ public class CarroCompraServicios extends GestionadDB<CarroCompra> {
     }
 
     public long getIdentityMax() {
-        long max = -1;
+
+
+
+        long valor = 0;
+        EntityManager em = getEntityManager();
+        try {
+            Query query = em.createQuery("select max(cc.id) from CarroCompra cc");
+            //query.setParameter("nombre", apellido+"%");
+            List list = query.getResultList();
+            try {
+                valor = (Long) list.get(0);
+                System.out.println("imprimi: "+valor+"\n\n\n\n\n");
+                return valor ;
+            }catch (NullPointerException e){
+                return 0;
+            }
+
+
+        } finally {
+            em.close();
+        }
+
+        /*
         Connection con = null;
         try {
             //utilizando los comodines (?)...
@@ -213,8 +241,8 @@ public class CarroCompraServicios extends GestionadDB<CarroCompra> {
             } catch (SQLException ex) {
                 Logger.getLogger(CarroCompraServicios.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        return -1;
+        }*/
+
     }
 
     public CarroCompra getCarroCompra(long id) {
